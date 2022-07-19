@@ -1,0 +1,36 @@
+POST http://localhost:8080/barcode/qr/
+Content-Type: application/json
+
+{
+  "dataToEncode" : "https://lowes.com"
+}
+
+###
+POST http://localhost:8080/barcode/pdf417/
+Content-Type: application/json
+
+{
+  "dataToEncode" : "https://lowes.com"
+}
+
+###
+POST http://localhost:8080/barcode/code128/
+Content-Type: application/json
+
+{
+  "dataToEncode" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do ffffffffffffffff"
+}
+
+###
+GET http://localhost:8080/barcode/code128/
+Accept: image/png
+
+###
+GET http://localhost:8080/barcode/ean13/{{barcodeEAN13}}
+Accept: image/png
+
+###
+GET http://localhost:8080/barcode/upca/{{barcodeUPC}}
+Accept: image/png
+
+###
