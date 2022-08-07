@@ -1,21 +1,19 @@
 package com.cipher0x.controllers;
 
 import com.cipher0x.services.BarcodeGenerator;
+import com.cipher0x.services.BarcodeReader;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.annotation.*;
+import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.http.server.types.files.StreamedFile;
 import jakarta.inject.Inject;
-
-import javax.print.attribute.standard.Media;
-import java.awt.image.BufferedImage;
 
 @Controller("/barcode")
 public class BarcodeController {
     @Inject
     BarcodeGenerator barcodeGenerator;
+    @Inject
+    BarcodeReader barcodeReader;
 
 
     @Get("/upca/{barcode}")
@@ -46,6 +44,14 @@ public class BarcodeController {
     @Produces(MediaType.IMAGE_PNG)
     public StreamedFile generateQRCodeImage(String dataToEncode)  throws Exception {
         return barcodeGenerator.generateQRCodeImage(dataToEncode);
+    }
+
+    @Post(value = "read/qr")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String readQRCodeImage(CompletedFileUpload upload)  throws Exception {
+        StreamedFile image = new StreamedFile(upload.getInputStream(), MediaType.IMAGE_PNG_TYPE);
+        return barcodeReader.readQRCodeImage(image);
     }
 
 }
